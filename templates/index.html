@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="NextCrop – AI-powered crop prediction system for Bangladeshi agriculture. Enter climate and region data to get accurate crop recommendations." />
+    <title>NextCrop — AI Crop Prediction</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+</head>
+<body>
+
+    <!-- Animated Background Particles -->
+    <div class="bg-particles" aria-hidden="true">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- ========== HEADER ========== -->
+    <header class="site-header" id="site-header">
+        <div class="header-inner">
+            <a href="/" class="logo" id="logo-link">
+                <span class="logo-icon" aria-hidden="true">🌾</span>
+                <span class="logo-text">Next<span class="logo-accent">Crop</span></span>
+            </a>
+            <p class="tagline">AI-Powered Crop Intelligence</p>
+        </div>
+    </header>
+
+    <!-- ========== MAIN ========== -->
+    <main class="main-content">
+
+        <!-- Hero Section -->
+        <section class="hero" id="hero-section">
+            <h1 class="hero-title">
+                Predict the <span class="text-gradient">Perfect Crop</span>
+            </h1>
+            <p class="hero-subtitle">
+                Enter your region, season, and climate data below. Our machine-learning model
+                will recommend the most suitable crop for your conditions.
+            </p>
+        </section>
+
+        <!-- Prediction Form Card -->
+        <section class="form-section" id="prediction-form-section">
+            <form id="prediction-form" class="prediction-card glass-card" autocomplete="off" novalidate>
+
+                <!-- ---- Region & Season ---- -->
+                <div class="form-group-header">
+                    <i data-lucide="map-pin" class="section-icon"></i>
+                    <h2 class="section-title">Region &amp; Season</h2>
+                </div>
+                <div class="form-grid two-col">
+                    <div class="field" id="field-district">
+                        <label for="District">District</label>
+                        <div class="select-wrapper">
+                            <select id="District" name="District" required>
+                                <option value="" disabled selected>Select district …</option>
+                                {% for val in options['District'] %}
+                                <option value="{{ val }}">{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                            <i data-lucide="chevron-down" class="select-chevron"></i>
+                        </div>
+                    </div>
+                    <div class="field" id="field-season">
+                        <label for="Season">Season</label>
+                        <div class="select-wrapper">
+                            <select id="Season" name="Season" required>
+                                <option value="" disabled selected>Select season …</option>
+                                {% for val in options['Season'] %}
+                                <option value="{{ val }}">{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                            <i data-lucide="chevron-down" class="select-chevron"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="form-divider" />
+
+                <!-- ---- Temperature ---- -->
+                <div class="form-group-header">
+                    <i data-lucide="thermometer" class="section-icon"></i>
+                    <h2 class="section-title">Temperature (°C)</h2>
+                </div>
+                <div class="form-grid three-col">
+                    <div class="field" id="field-avg-temp">
+                        <label for="Avg Temp">Average</label>
+                        <input type="number" id="Avg Temp" name="Avg Temp" step="0.1" placeholder="e.g. 28.5" required />
+                    </div>
+                    <div class="field" id="field-max-temp">
+                        <label for="Max Temp">Maximum</label>
+                        <input type="number" id="Max Temp" name="Max Temp" step="0.1" placeholder="e.g. 35.2" required />
+                    </div>
+                    <div class="field" id="field-min-temp">
+                        <label for="Min Temp">Minimum</label>
+                        <input type="number" id="Min Temp" name="Min Temp" step="0.1" placeholder="e.g. 22.0" required />
+                    </div>
+                </div>
+
+                <hr class="form-divider" />
+
+                <!-- ---- Humidity ---- -->
+                <div class="form-group-header">
+                    <i data-lucide="droplets" class="section-icon"></i>
+                    <h2 class="section-title">Humidity (%)</h2>
+                </div>
+                <div class="form-grid three-col">
+                    <div class="field" id="field-avg-humidity">
+                        <label for="Avg Humidity">Average</label>
+                        <input type="number" id="Avg Humidity" name="Avg Humidity" step="0.1" placeholder="e.g. 75" required />
+                    </div>
+                    <div class="field" id="field-max-rh">
+                        <label for="Max Relative Humidity">Maximum RH</label>
+                        <input type="number" id="Max Relative Humidity" name="Max Relative Humidity" step="0.1" placeholder="e.g. 92" required />
+                    </div>
+                    <div class="field" id="field-min-rh">
+                        <label for="Min Relative Humidity">Minimum RH</label>
+                        <input type="number" id="Min Relative Humidity" name="Min Relative Humidity" step="0.1" placeholder="e.g. 55" required />
+                    </div>
+                </div>
+
+                <hr class="form-divider" />
+
+                <!-- ---- Crop Cycle ---- -->
+                <div class="form-group-header">
+                    <i data-lucide="calendar-range" class="section-icon"></i>
+                    <h2 class="section-title">Crop Cycle</h2>
+                </div>
+                <div class="form-grid three-col">
+                    <div class="field" id="field-transplant">
+                        <label for="Transplant">Transplant</label>
+                        <div class="select-wrapper">
+                            <select id="Transplant" name="Transplant" required>
+                                <option value="" disabled selected>Select …</option>
+                                {% for val in options['Transplant'] %}
+                                <option value="{{ val }}">{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                            <i data-lucide="chevron-down" class="select-chevron"></i>
+                        </div>
+                    </div>
+                    <div class="field" id="field-growth">
+                        <label for="Growth">Growth Period</label>
+                        <div class="select-wrapper">
+                            <select id="Growth" name="Growth" required>
+                                <option value="" disabled selected>Select …</option>
+                                {% for val in options['Growth'] %}
+                                <option value="{{ val }}">{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                            <i data-lucide="chevron-down" class="select-chevron"></i>
+                        </div>
+                    </div>
+                    <div class="field" id="field-harvest">
+                        <label for="Harvest">Harvest Period</label>
+                        <div class="select-wrapper">
+                            <select id="Harvest" name="Harvest" required>
+                                <option value="" disabled selected>Select …</option>
+                                {% for val in options['Harvest'] %}
+                                <option value="{{ val }}">{{ val }}</option>
+                                {% endfor %}
+                            </select>
+                            <i data-lucide="chevron-down" class="select-chevron"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="form-divider" />
+
+                <!-- Submit -->
+                <button type="submit" id="predict-btn" class="btn-predict">
+                    <span class="btn-label">
+                        <i data-lucide="sparkles" class="btn-icon"></i>
+                        Predict Crop
+                    </span>
+                    <span class="btn-loading" aria-hidden="true">
+                        <span class="spinner"></span>
+                        Analyzing …
+                    </span>
+                </button>
+            </form>
+        </section>
+
+        <!-- Result Card (initially hidden) -->
+        <section class="result-section hidden" id="result-section">
+            <div class="result-card glass-card" id="result-card">
+                <div class="result-icon-wrap" id="result-icon-wrap">
+                    <i data-lucide="leaf" class="result-icon"></i>
+                </div>
+                <p class="result-label">Recommended Crop</p>
+                <h2 class="result-crop" id="result-crop">—</h2>
+                <p class="result-hint">Based on your inputs, this crop has the highest predicted suitability.</p>
+                <button type="button" class="btn-new" id="btn-new-prediction">
+                    <i data-lucide="rotate-ccw" class="btn-icon"></i>
+                    New Prediction
+                </button>
+            </div>
+        </section>
+
+        <!-- Error Toast -->
+        <div class="error-toast hidden" id="error-toast" role="alert">
+            <i data-lucide="alert-triangle" class="toast-icon"></i>
+            <span class="toast-msg" id="error-msg">Something went wrong.</span>
+            <button type="button" class="toast-close" id="toast-close" aria-label="Dismiss">
+                <i data-lucide="x"></i>
+            </button>
+        </div>
+
+    </main>
+
+    <!-- ========== FOOTER ========== -->
+    <footer class="site-footer" id="site-footer">
+        <p>&copy; 2026 NextCrop &mdash;</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
